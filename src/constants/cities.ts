@@ -1,0 +1,78 @@
+import type { City } from '../types/weather'
+
+export const VIETNAM_CITIES: City[] = [
+  {
+    id: 'ha-noi',
+    name: 'Hà Nội',
+    asciiName: 'Ha Noi',
+    aliases: ['HN', 'Hanoi', 'Thu Do'],
+    latitude: 21.0285,
+    longitude: 105.8542,
+    region: 'Bắc',
+  },
+  {
+    id: 'hai-phong',
+    name: 'Hải Phòng',
+    asciiName: 'Hai Phong',
+    aliases: ['HP', 'Haiphong', 'Dat Cang'],
+    latitude: 20.8449,
+    longitude: 106.6881,
+    region: 'Bắc',
+  },
+  {
+    id: 'hue',
+    name: 'Huế',
+    asciiName: 'Hue',
+    aliases: ['Thua Thien Hue', 'Co Do'],
+    latitude: 16.4637,
+    longitude: 107.5909,
+    region: 'Trung',
+  },
+  {
+    id: 'da-nang',
+    name: 'Đà Nẵng',
+    asciiName: 'Da Nang',
+    aliases: ['DN', 'Danang'],
+    latitude: 16.0544,
+    longitude: 108.2022,
+    region: 'Trung',
+  },
+  {
+    id: 'nha-trang',
+    name: 'Nha Trang',
+    asciiName: 'Nha Trang',
+    aliases: ['NT', 'Khanh Hoa'],
+    latitude: 12.2388,
+    longitude: 109.1967,
+    region: 'Trung',
+  },
+  {
+    id: 'da-lat',
+    name: 'Đà Lạt',
+    asciiName: 'Da Lat',
+    aliases: ['Dalat', 'Lam Dong', 'Thanh Pho Ngan Hoa'],
+    latitude: 11.9404,
+    longitude: 108.4583,
+    region: 'Trung',
+  },
+  {
+    id: 'tp-ho-chi-minh',
+    name: 'TP. Hồ Chí Minh',
+    asciiName: 'TP. Ho Chi Minh',
+    aliases: ['Sai Gon', 'Saigon', 'TPHCM', 'HCM', 'TP Ho Chi Minh'],
+    latitude: 10.8231,
+    longitude: 106.6297,
+    region: 'Nam',
+  },
+  {
+    id: 'can-tho',
+    name: 'Cần Thơ',
+    asciiName: 'Can Tho',
+    aliases: ['CT', 'Cantho', 'Tay Do'],
+    latitude: 10.0452,
+    longitude: 105.7469,
+    region: 'Nam',
+  },
+]
+
+export const DEFAULT_CITY = VIETNAM_CITIES[0]
