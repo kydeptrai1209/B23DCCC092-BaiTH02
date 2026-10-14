@@ -61,10 +61,18 @@ describe('Weather App Component Integration', () => {
     expect(screen.getByText(/12.5/)).toBeInTheDocument()
     expect(screen.getByText(/14:30 - 14\/10\/2026/)).toBeInTheDocument()
 
-    // Verify 7-day forecast (YC3)
+    // Verify 7-day forecast (YC3) - all 7 days have day of week and day/month
     expect(screen.getByTestId('weather-forecast')).toBeInTheDocument()
-    expect(screen.getByText('Hôm nay')).toBeInTheDocument()
-    expect(screen.getByText('Ngày mai')).toBeInTheDocument()
+    expect(screen.getByText('Hôm nay · Thứ Tư')).toBeInTheDocument()
+    expect(screen.getByText('Ngày mai · Thứ Năm')).toBeInTheDocument()
+    expect(screen.getByText('Thứ Sáu')).toBeInTheDocument()
+    expect(screen.getByText('Thứ Bảy')).toBeInTheDocument()
+    expect(screen.getByText('Chủ Nhật')).toBeInTheDocument()
+    expect(screen.getByText('Thứ Hai')).toBeInTheDocument()
+    expect(screen.getByText('Thứ Ba')).toBeInTheDocument()
+    expect(screen.getByText('14/10')).toBeInTheDocument()
+    expect(screen.getByText('15/10')).toBeInTheDocument()
+    expect(screen.getByText('20/10')).toBeInTheDocument()
 
     expect(fetchSpy).toHaveBeenCalledTimes(1)
   })

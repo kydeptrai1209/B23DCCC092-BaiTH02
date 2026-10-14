@@ -3,16 +3,26 @@ import { formatForecastDate, formatCurrentUpdateTime } from '../utils/date'
 
 describe('Date formatting utilities', () => {
   describe('formatForecastDate', () => {
-    it('formats today (index 0) correctly regardless of day of week', () => {
+    it('formats today (index 0) with prefix and day of week', () => {
       const result = formatForecastDate('2026-10-14', 0)
-      expect(result.dayOfWeek).toBe('Hôm nay')
+      expect(result.dayOfWeek).toBe('Hôm nay · Thứ Tư')
       expect(result.dayOfMonth).toBe('14/10')
+
+      // Sunday test
+      const sundayResult = formatForecastDate('2026-10-18', 0)
+      expect(sundayResult.dayOfWeek).toBe('Hôm nay · Chủ Nhật')
+      expect(sundayResult.dayOfMonth).toBe('18/10')
     })
 
-    it('formats tomorrow (index 1) correctly', () => {
+    it('formats tomorrow (index 1) with prefix and day of week', () => {
       const result = formatForecastDate('2026-10-15', 1)
-      expect(result.dayOfWeek).toBe('Ngày mai')
+      expect(result.dayOfWeek).toBe('Ngày mai · Thứ Năm')
       expect(result.dayOfMonth).toBe('15/10')
+
+      // Monday test
+      const mondayResult = formatForecastDate('2026-10-19', 1)
+      expect(mondayResult.dayOfWeek).toBe('Ngày mai · Thứ Hai')
+      expect(mondayResult.dayOfMonth).toBe('19/10')
     })
 
     it('calculates correct Vietnamese day of week for subsequent days without UTC timezone shifting', () => {
@@ -47,6 +57,31 @@ describe('Date formatting utilities', () => {
       expect(result.dayOfMonth).toBe('03/05')
       // 2026-05-03 is Sunday (Chủ Nhật)
       expect(result.dayOfWeek).toBe('Chủ Nhật')
+    })
+
+    it('correctly handles ISO strings with time components without corruption or losing day of week', () => {
+      const todayIso = formatForecastDate('2026-10-14T14:30', 0)
+      expect(todayIso.dayOfWeek).toBe('Hôm nay · Thứ Tư')
+      expect(todayIso.dayOfMonth).toBe('14/10')
+
+      const tomorrowIso = formatForecastDate('2026-10-15T23:59:59Z', 1)
+      expect(tomorrowIso.dayOfWeek).toBe('Ngày mai · Thứ Năm')
+      expect(tomorrowIso.dayOfMonth).toBe('15/10')
+
+      const dayAfterIso = formatForecastDate('2026-10-16T08:00:00.000Z', 2)
+      expect(dayAfterIso.dayOfWeek).toBe('Thứ Sáu')
+      expect(dayAfterIso.dayOfMonth).toBe('16/10')
+    })
+
+    it('returns empty dayOfWeek and dayOfMonth for empty or invalid date strings', () => {
+      expect(formatForecastDate('', 0)).toEqual({ dayOfWeek: '', dayOfMonth: '' })
+      expect(formatForecastDate('invalid-date', 0)).toEqual({ dayOfWeek: '', dayOfMonth: '' })
+    })
+
+    it('formats day of week without today/tomorrow prefix when index is omitted', () => {
+      const result = formatForecastDate('2026-10-14')
+      expect(result.dayOfWeek).toBe('Thứ Tư')
+      expect(result.dayOfMonth).toBe('14/10')
     })
   })
 
