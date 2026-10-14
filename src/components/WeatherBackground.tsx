@@ -6,8 +6,8 @@ interface WeatherBackgroundProps {
 }
 
 export const WeatherBackground: React.FC<WeatherBackgroundProps> = ({ condition }) => {
-  const category = condition?.category || 'clear'
-  const gradient = condition?.themeClasses.bgGradient || 'from-slate-900 via-indigo-950 to-slate-950'
+  const category = condition ? condition.category : 'neutral'
+  const gradient = condition?.themeClasses.bgGradient || 'from-slate-900 via-indigo-950/40 to-slate-950'
 
   return (
     <div
@@ -23,6 +23,13 @@ export const WeatherBackground: React.FC<WeatherBackgroundProps> = ({ condition 
       />
 
       {/* Condition-specific ambient visual effects */}
+      {category === 'neutral' && (
+        <>
+          <div className="absolute -top-20 left-1/4 w-96 h-96 rounded-full bg-blue-500/10 blur-3xl" />
+          <div className="absolute top-1/2 -right-20 w-80 h-80 rounded-full bg-indigo-500/10 blur-3xl" />
+        </>
+      )}
+
       {category === 'clear' && (
         <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-amber-500/20 blur-3xl animate-pulse" />
       )}

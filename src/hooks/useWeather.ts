@@ -11,11 +11,22 @@ interface UseWeatherResult {
 
 export function useWeather(selectedCity: City | null): UseWeatherResult {
   const [data, setData] = useState<OpenMeteoResponse | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(() => Boolean(selectedCity))
   const [error, setError] = useState<string | null>(null)
   const [retryTrigger, setRetryTrigger] = useState<number>(0)
+  const [prevCityId, setPrevCityId] = useState<string | null>(selectedCity?.id ?? null)
+
+  const currentCityId = selectedCity?.id ?? null
+  if (currentCityId !== prevCityId) {
+    setPrevCityId(currentCityId)
+    setData(null)
+    setIsLoading(Boolean(selectedCity))
+    setError(null)
+  }
 
   const refetch = useCallback(() => {
+    setIsLoading(true)
+    setError(null)
     setRetryTrigger((prev) => prev + 1)
   }, [])
 
@@ -26,22 +37,18 @@ export function useWeather(selectedCity: City | null): UseWeatherResult {
 
     const abortController = new AbortController()
 
-    queueMicrotask(() => {
-      if (!abortController.signal.aborted) {
-        setIsLoading(true)
-        setError(null)
-      }
-    })
-
     fetchCityWeather(selectedCity.latitude, selectedCity.longitude, abortController.signal)
       .then((res) => {
-        setData(res)
-        setError(null)
+        if (!abortController.signal.aborted) {
+          setData(res)
+          setError(null)
+        }
       })
       .catch((err: unknown) => {
-        if (err instanceof DOMException && err.name === 'AbortError') {
+        if (abortController.signal.aborted) {
           return
         }
+        setData(null)
         const message =
           err instanceof Error
             ? err.message
@@ -49,7 +56,9 @@ export function useWeather(selectedCity: City | null): UseWeatherResult {
         setError(message)
       })
       .finally(() => {
-        setIsLoading(false)
+        if (!abortController.signal.aborted) {
+          setIsLoading(false)
+        }
       })
 
     return () => {

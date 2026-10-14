@@ -190,4 +190,32 @@ describe('Weather App Component Integration', () => {
     expect(screen.getByTestId('empty-state')).toBeInTheDocument()
     expect(screen.getByText('Chưa chọn thành phố')).toBeInTheDocument()
   })
+
+  it('renders in unselected state when initialCity is null and selects city via suggestion chip (YC4)', async () => {
+    const fetchSpy = vi.spyOn(weatherApi, 'fetchCityWeather').mockResolvedValue(mockWeatherData)
+
+    render(<App initialCity={null} />)
+
+    // Empty state should be visible immediately
+    expect(screen.getByTestId('empty-state')).toBeInTheDocument()
+    expect(screen.getByText('Chưa chọn thành phố')).toBeInTheDocument()
+    expect(screen.queryByTestId('weather-current')).not.toBeInTheDocument()
+
+    // Click quick suggestion chip "Hà Nội"
+    const quickChip = screen.getByRole('button', { name: 'Hà Nội' })
+    fireEvent.click(quickChip)
+
+    // Should fetch and display weather
+    await waitFor(() => {
+      expect(screen.getByTestId('weather-current')).toBeInTheDocument()
+    })
+    expect(fetchSpy).toHaveBeenCalledTimes(1)
+
+    // Clicking top-right Bỏ chọn button on WeatherCurrent card should unselect
+    const deselectBtn = screen.getByTitle('Bỏ chọn thành phố')
+    fireEvent.click(deselectBtn)
+
+    expect(screen.getByTestId('empty-state')).toBeInTheDocument()
+  })
 })
+

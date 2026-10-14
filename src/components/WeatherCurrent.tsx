@@ -1,5 +1,5 @@
 import React from 'react'
-import { Droplets, Wind, Clock, MapPin, Sparkles } from 'lucide-react'
+import { Droplets, Wind, Clock, MapPin, Sparkles, X } from 'lucide-react'
 import type { City, OpenMeteoCurrent, TemperatureUnit } from '../types/weather'
 import { getWeatherCondition } from '../constants/weatherCodes'
 import { WeatherIcon } from './WeatherIcon'
@@ -10,9 +10,15 @@ interface WeatherCurrentProps {
   city: City
   current: OpenMeteoCurrent
   unit: TemperatureUnit
+  onDeselect?: () => void
 }
 
-export const WeatherCurrent: React.FC<WeatherCurrentProps> = ({ city, current, unit }) => {
+export const WeatherCurrent: React.FC<WeatherCurrentProps> = ({
+  city,
+  current,
+  unit,
+  onDeselect,
+}) => {
   const condition = getWeatherCondition(current.weather_code)
   const formattedTemp = formatTemperature(current.temperature_2m, unit)
   const updateTime = formatCurrentUpdateTime(current.time)
@@ -24,6 +30,19 @@ export const WeatherCurrent: React.FC<WeatherCurrentProps> = ({ city, current, u
     >
       {/* Background ambient radial highlight */}
       <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+
+      {/* Top right deselect button */}
+      {onDeselect && (
+        <button
+          type="button"
+          onClick={onDeselect}
+          className="absolute top-4 right-4 p-2 rounded-xl bg-white/5 hover:bg-white/15 active:scale-95 text-slate-400 hover:text-white border border-white/10 transition-all flex items-center gap-1.5 text-xs cursor-pointer z-10"
+          title="Bỏ chọn thành phố"
+        >
+          <X className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Bỏ chọn</span>
+        </button>
+      )}
 
       {/* Top row: City info & Weather Icon */}
       <div className="flex flex-col-reverse sm:flex-row justify-between items-start gap-4">

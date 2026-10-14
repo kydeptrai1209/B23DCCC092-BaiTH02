@@ -59,7 +59,7 @@ export const VIETNAM_CITIES: City[] = [
     id: 'tp-ho-chi-minh',
     name: 'TP. Hồ Chí Minh',
     asciiName: 'TP. Ho Chi Minh',
-    aliases: ['Sai Gon', 'Saigon', 'TPHCM', 'HCM', 'TP Ho Chi Minh'],
+    aliases: ['Sai Gon', 'Saigon', 'TPHCM', 'HCM', 'TP Ho Chi Minh', 'Ho Chi Minh', 'TP.HCM', 'TP HCM', 'TP. HCM'],
     latitude: 10.8231,
     longitude: 106.6297,
     region: 'Nam',

@@ -20,15 +20,22 @@ export function matchCitySearch(city: City, rawQuery: string): boolean {
   const query = removeVietnameseTones(rawQuery)
   if (!query) return true
 
-  const normalizedCityName = removeVietnameseTones(city.name)
-  if (normalizedCityName.includes(query)) return true
+  // Chuẩn hóa loại bỏ dấu chấm, gạch nối và khoảng trắng dư thừa
+  const cleanQuery = query.replace(/[.\-_]/g, '').replace(/\s+/g, '')
 
-  const normalizedAscii = removeVietnameseTones(city.asciiName)
-  if (normalizedAscii.includes(query)) return true
+  const targets = [
+    city.name,
+    city.asciiName,
+    city.region,
+    `Miền ${city.region}`,
+    ...city.aliases,
+  ]
 
-  if (city.aliases.some((alias) => removeVietnameseTones(alias).includes(query))) {
-    return true
-  }
-
-  return false
+  return targets.some((target) => {
+    const normalized = removeVietnameseTones(target)
+    if (normalized.includes(query)) return true
+    const cleanTarget = normalized.replace(/[.\-_]/g, '').replace(/\s+/g, '')
+    if (cleanTarget.includes(cleanQuery)) return true
+    return false
+  })
 }

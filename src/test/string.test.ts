@@ -35,5 +35,13 @@ describe('Vietnamese String & Search Utilities', () => {
     expect(matchCitySearch(tphcm, 'saigon')).toBe(true)
     expect(matchCitySearch(tphcm, 'sai gon')).toBe(true)
     expect(matchCitySearch(tphcm, 'tphcm')).toBe(true)
+    expect(matchCitySearch(tphcm, 'tp.hcm')).toBe(true)
+    expect(matchCitySearch(tphcm, 'tp hcm')).toBe(true)
+    expect(matchCitySearch(tphcm, 'tp. hcm')).toBe(true)
+
+    // Match by region
+    expect(matchCitySearch(haNoi, 'bac')).toBe(true)
+    expect(matchCitySearch(haNoi, 'mien bac')).toBe(true)
+    expect(matchCitySearch(tphcm, 'nam')).toBe(true)
   })
 })

@@ -13,8 +13,12 @@ import { LoadingSkeleton } from './components/LoadingSkeleton'
 import { ErrorState } from './components/ErrorState'
 import { EmptyState } from './components/EmptyState'
 
-export function App() {
-  const [selectedCity, setSelectedCity] = useState<City | null>(DEFAULT_CITY)
+interface AppProps {
+  initialCity?: City | null
+}
+
+export function App({ initialCity = DEFAULT_CITY }: AppProps = {}) {
+  const [selectedCity, setSelectedCity] = useState<City | null>(initialCity)
   const [unit, setUnit] = useState<TemperatureUnit>('celsius')
 
   // Weather data hook
@@ -42,7 +46,7 @@ export function App() {
       <Header
         unit={unit}
         onToggleUnit={handleToggleUnit}
-        onRefresh={refetch}
+        onRefresh={selectedCity ? refetch : undefined}
         isRefreshing={isLoading}
       />
 
@@ -63,15 +67,16 @@ export function App() {
               onToggleFavorite={toggleFavorite}
             />
 
-            {/* Quick Unselect button for testing / viewing unselected state (YC4) */}
+            {/* Nút Bỏ chọn thành phố (YC4: Xem trạng thái chưa chọn) */}
             {selectedCity && (
               <div className="mt-3 text-center">
                 <button
                   type="button"
                   onClick={() => setSelectedCity(null)}
-                  className="text-xs text-slate-400 hover:text-slate-200 transition-colors underline decoration-dotted underline-offset-4"
+                  className="text-xs text-slate-400 hover:text-slate-200 transition-colors underline decoration-dotted underline-offset-4 cursor-pointer"
+                  title="Bỏ chọn để xem trạng thái chưa chọn"
                 >
-                  Bỏ chọn thành phố (xem giao diện chưa chọn)
+                  Bỏ chọn thành phố
                 </button>
               </div>
             )}
@@ -100,6 +105,7 @@ export function App() {
                   city={selectedCity}
                   current={data.current}
                   unit={unit}
+                  onDeselect={() => setSelectedCity(null)}
                 />
 
                 {/* Dự báo 7 ngày (YC3) */}
